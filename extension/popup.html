@@ -13,6 +13,38 @@ img {
 }
 </style>
 
+<script language="javascript" type="text/javascript">
+<!-- 
+//Browser Support Code
+function ajaxFunction(){
+	var ajaxRequest = new XMLHttpRequest();
+	i = 1;
+	img_list = document.getElementsByTagName("img");
+	
+	
+	if (img_list[i].src.charAt(0) == "/") {
+		ajaxRequest.open("GET","www.thedekel.net/image?url=" + document.URL + img_list[i].src,true);
+	} else {
+		ajaxRequest.open("GET","www.thedekel.net/image?url=" + img_list[i].src,true);
+	}
+	ajaxRequest.send();
+	
+	ajaxRequest.onreadystatechange = function() {
+		if (ajaxRequest.status == 200 && ajaxRequest.readyState == 4 && i < img_list.length) {
+			if (img_list[i].src.charAt(0) == "/") {
+				ajaxRequest.open("GET","www.thedekel.net/image?url=" + document.URL + img_list[i].src,true);
+			} else {
+				ajaxRequest.open("GET","www.thedekel.net/image?url=" + img_list[i].src,true);
+			}
+			ajaxRequest.send();
+			i++;
+		}
+	}
+}
+//-->
+</script>
+
+<!--
 <script>
 var req = new XMLHttpRequest();
 req.open(
@@ -48,3 +80,4 @@ function constructImageURL(photo) {
       "_s.jpg";
 }
 </script>
+-->
