@@ -1,4 +1,6 @@
 var net = require("net"),
+    util = require("util"),
+    exec = require("child_process").exec,
     http = require("http"),
     url = require("url"),
     path = require("path");
@@ -32,6 +34,9 @@ http.createServer(function(req,res){
             imageres.on('data', function(redirectdata){
                 //console.log(redirectdata.toString());
                 var mydata = /HREF=".+"/.exec(redirectdata.toString());
+                if (mydata==null){
+                  return;
+                }
                 var imageurl = mydata[0].substring(6,mydata[0].length-1);
                 var stringrequest = client2.request("GET", imageurl, subheaders);
                 //console.log(imageurl);
@@ -53,12 +58,19 @@ http.createServer(function(req,res){
                             console.log(ret);
                             //use ret here
                             var subheaders2 = {
-                                "Host":"open.api.ebay.com",
+                                "Host":"svcs.ebay.com",
                                 "User-Agent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.2 (KHTML, like Gecko) Chrome/15.0.874.106 Safari/535.2",
                                 'Content-Type':'application/json'
                             }
-                            var productrequest = client3.request("GET", "http://open.api.ebay.com/shopping?callname=FindItems&responseencoding=JSON&appid=GeorgiaT-3078-4732-83f0-eaaa3ac8b977&siteid=0&QueryKeywords="+ret.replace(" ","+")+"&version=713",subheaders2);
-                            productrequest.on('response',function(jsonstream){
+                            var command = 'curl '+"\"http://svcs.ebay.com/services/search/FindingService/v1?OPERATION-NAME=findItemsByKeywords&SERVICE-VERSION=1.11.0&SECURITY-APPNAME="+SEC_APPNAME+"&RESPONSE-DATA-FORMAT=JSON&REST-PAYLOAD&keywords=test&paginationInput.entriesPerPage=3\"";
+                            child = exec(command, function(error,stdout,stderr){
+                              //console.log("stdout: " +stdout);
+                              res.writeHead(200, {"Content-Type":"text/plain"});
+                              res.end(stdout);
+                              //console.log('stderr: '+stderr);
+
+                            });
+                            /*productrequest.on('response',function(jsonstream){
                                 jsonstream.on('data',function(myjson){
                                     console.log(myjson.toString());
                                     res.writeHead(200,{"Content-Type":"application/json"});
@@ -67,7 +79,7 @@ http.createServer(function(req,res){
                                 });
                             });
                             productrequest.write("black rock shooter is pretty good.");
-                            productrequest.end();
+                            productrequest.end();*/
                         }
                     });
                 });
@@ -76,6 +88,5 @@ http.createServer(function(req,res){
             });
         });
         imagerequest.end();
-        res.end();
     }
 }).listen(8000);
