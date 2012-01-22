@@ -32,14 +32,14 @@ http.createServer(function(req,res){
 
         imagerequest.on('response', function(imageres){
             imageres.on('data', function(redirectdata){
-                //console.log(redirectdata.toString());
+               // console.log(redirectdata.toString());
                 var mydata = /HREF=".+"/.exec(redirectdata.toString());
                 if (mydata==null){
                   return;
                 }
                 var imageurl = mydata[0].substring(6,mydata[0].length-1);
                 var stringrequest = client2.request("GET", imageurl, subheaders);
-                //console.log(imageurl);
+                console.log(imageurl);
                 stringrequest.on('response',function(finalres){
                     finalres.on('data',function(finaldata){
                         //console.log(finaldata.toString());
@@ -64,26 +64,18 @@ http.createServer(function(req,res){
                             }
                             ret = ret.replace(/\s/g,"+");
                             console.log(ret);
-                            var command = 'curl '+"\"http://svcs.ebay.com/services/search/FindingService/v1?OPERATION-NAME=findItemsByKeywords&SERVICE-VERSION=1.11.0&SECURITY-APPNAME="+SEC_APPNAME+"&RESPONSE-DATA-FORMAT=JSON&REST-PAYLOAD&keywords="+ret+"&paginationInput.entriesPerPage=3\"";
+                            var command = 'curl '+"\"http://svcs.ebay.com/services/search/FindingService/v1?OPERATION-NAME=findItemsByKeywords&SERVICE-VERSION=1.11.0&SECURITY-APPNAME="+SEC_APPNAME+"&RESPONSE-DATA-FORMAT=JSON&REST-PAYLOAD&keywords="+ret+"&paginationInput.entriesPerPage=10\"";
                             child = exec(command, function(error,stdout,stderr){
                               console.log("stdout: " +stdout);
                               res.writeHead(200, {"Content-Type":"text/plain"});
                               res.end(stdout);
-                              //console.log('stderr: '+stderr);
-
                             });
-                            /*productrequest.on('response',function(jsonstream){
-                                jsonstream.on('data',function(myjson){
-                                    console.log(myjson.toString());
-                                    res.writeHead(200,{"Content-Type":"application/json"});
-                                    res.write(myjson.toString());
-                                    res.end();
-                                });
-                            });
-                            productrequest.write("black rock shooter is pretty good.");
-                            productrequest.end();*/
                         }
                     });
+                    finalres.on("end",function(){
+                        //res.end();
+                    });
+
                 });
                 stringrequest.write("hey");
                 stringrequest.end();

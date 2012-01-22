@@ -1,12 +1,25 @@
 {
-    "name":"My First Extension",
+    "name":"eBay Image Search",
     "version": "1.0",
-    "description":"The first extension that I made.",
+    "description":"A Chrome extension that searches for products on eBay based on an image right-clicked upon.",
     "browser_action": {
-        "default_icon": "icon.png",
-        "popup": "popup.html"
+        "default_icon": "icon-16.png"
     },
+//    "content_scripts":[{
+  //      "matches":["http://*/*"],
+//        "js":["myscript.js"],
+    //    "all_frames":true
+   //     }
+ //   ],
+    "background_page":"background.html",
     "permissions":[
-        "http://api.flickr.com/"
-    ]
+        "contextMenus",
+        "tabs",
+        "http://*/*",
+        "http://127.0.0.1/*"
+    ],
+    "icons":{
+        "16":"icon-16.png"
+    }
+        
 }
