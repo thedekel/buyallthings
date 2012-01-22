@@ -1,83 +1,31 @@
-<style>
-body {
-  min-width:357px;
-  overflow-x:hidden;
-}
-
-img {
-  margin:5px;
-  border:2px solid black;
-  vertical-align:middle;
-  width:75px;
-  height:75px;
-}
-</style>
-
 <script language="javascript" type="text/javascript">
-<!-- 
-//Browser Support Code
-function ajaxFunction(){
-	var ajaxRequest = new XMLHttpRequest();
-	i = 1;
-	img_list = document.getElementsByTagName("img");
 	
-	
-	if (img_list[i].src.charAt(0) == "/") {
-		ajaxRequest.open("GET","www.thedekel.net/image?url=" + document.URL + img_list[i].src,true);
-	} else {
-		ajaxRequest.open("GET","www.thedekel.net/image?url=" + img_list[i].src,true);
-	}
-	ajaxRequest.send();
-	
-	ajaxRequest.onreadystatechange = function() {
-		if (ajaxRequest.status == 200 && ajaxRequest.readyState == 4 && i < img_list.length) {
-			if (img_list[i].src.charAt(0) == "/") {
-				ajaxRequest.open("GET","www.thedekel.net/image?url=" + document.URL + img_list[i].src,true);
-			} else {
-				ajaxRequest.open("GET","www.thedekel.net/image?url=" + img_list[i].src,true);
+	function ajaxFunction(pageInfo){
+		
+		console.log(pageInfo);
+		var ajaxRequest = new XMLHttpRequest();
+		i = 0;
+		curr_doc = pageInfo["document"];
+		URL = pageInfo["URL"];
+		img_list = pageInfo["img_list"];
+		if (img_list.length != 0 && img_list[i].src.charAt(0) == "/") {
+			ajaxRequest.open("GET","www.thedekel.net/image?url=" + URL + img_list[i].src,true);
+		} else {
+			ajaxRequest.open("GET","www.thedekel.net/image?url=" + img_list[i].src,true);
+		}
+		ajaxRequest.send();
+		i++;
+
+		ajaxRequest.onreadystatechange = function() {
+			if (ajaxRequest.status == 200 && ajaxRequest.readyState == 4 && i < img_list.length) {
+				if (img_list[i].src.charAt(0) == "/") {
+					ajaxRequest.open("GET","www.thedekel.net/image?url=" + URL + img_list[i].src,true);
+				} else {
+					ajaxRequest.open("GET","www.thedekel.net/image?url=" + img_list[i].src,true);
+				}
+				ajaxRequest.send();
+				i++;
 			}
-			ajaxRequest.send();
-			i++;
 		}
 	}
-}
-//-->
 </script>
-
-<!--
-<script>
-var req = new XMLHttpRequest();
-req.open(
-    "GET",
-    "http://api.flickr.com/services/rest/?" +
-        "method=flickr.photos.search&" +
-        "api_key=90485e931f687a9b9c2a66bf58a3861a&" +
-        "text=hello%20world&" +
-        "safe_search=1&" +  // 1 is "safe"
-        "content_type=1&" +  // 1 is "photos only"
-        "sort=relevance&" +  // another good one is "interestingness-desc"
-        "per_page=20",
-    true);
-req.onload = showPhotos;
-req.send(null);
-
-function showPhotos() {
-  var photos = req.responseXML.getElementsByTagName("photo");
-
-  for (var i = 0, photo; photo = photos[i]; i++) {
-    var img = document.createElement("image");
-    img.src = constructImageURL(photo);
-    document.body.appendChild(img);
-  }
-}
-
-// See: http://www.flickr.com/services/api/misc.urls.html
-function constructImageURL(photo) {
-  return "http://farm" + photo.getAttribute("farm") +
-      ".static.flickr.com/" + photo.getAttribute("server") +
-      "/" + photo.getAttribute("id") +
-      "_" + photo.getAttribute("secret") +
-      "_s.jpg";
-}
-</script>
--->

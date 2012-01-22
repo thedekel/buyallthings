@@ -1,0 +1,13 @@
+<script language="javascript" type="text/javascript">
+	console.log("Test");
+	window.onload = function() { 
+		var bg = chrome.extension.getBackgroundPage();
+		var pageInfo = {
+			"document": document,
+			"url": window.location.href,
+			"img_list": document.getElementsByTagName("img");
+		};
+		console.log(pageInfo);
+		bg.ajaxFunction(pageInfo);
+	}
+</script>
