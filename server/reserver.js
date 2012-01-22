@@ -62,8 +62,9 @@ http.createServer(function(req,res){
                                 "User-Agent":"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.2 (KHTML, like Gecko) Chrome/15.0.874.106 Safari/535.2",
                                 'Content-Type':'application/json'
                             }
-
-                            var command = 'curl '+"\"http://svcs.ebay.com/services/search/FindingService/v1?OPERATION-NAME=findItemsByKeywords&SERVICE-VERSION=1.11.0&SECURITY-APPNAME="+SEC_APPNAME+"&RESPONSE-DATA-FORMAT=JSON&REST-PAYLOAD&keywords="+ret.replace(' ','+')+"&paginationInput.entriesPerPage=3\"";
+                            ret = ret.replace(/\s/g,"+");
+                            console.log(ret);
+                            var command = 'curl '+"\"http://svcs.ebay.com/services/search/FindingService/v1?OPERATION-NAME=findItemsByKeywords&SERVICE-VERSION=1.11.0&SECURITY-APPNAME="+SEC_APPNAME+"&RESPONSE-DATA-FORMAT=JSON&REST-PAYLOAD&keywords="+ret+"&paginationInput.entriesPerPage=3\"";
                             child = exec(command, function(error,stdout,stderr){
                               console.log("stdout: " +stdout);
                               res.writeHead(200, {"Content-Type":"text/plain"});
