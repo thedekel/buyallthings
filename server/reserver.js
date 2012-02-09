@@ -33,11 +33,9 @@ http.createServer(function(req,res){
 			port: 80,
 			path: "/searchbyimage?image_url="+imageurl,
 			method: "GET"
+		};
 
-		}
-        var imagerequest = client.request("GET", "http://images.google.com/searchbyimage?image_url="+imageurl, headers);
-
-        imagerequest.on('response', function(imageres){
+        var imagerequest = http.request(options1,function(imageres){
             imageres.on('data', function(redirectdata){
                // console.log(redirectdata.toString());
                 var mydata = /HREF=".+"/.exec(redirectdata.toString());
@@ -45,11 +43,18 @@ http.createServer(function(req,res){
                   return;
                 }
                 var imageurl = mydata[0].substring(6,mydata[0].length-1);
-                var stringrequest = client2.request("GET", imageurl, subheaders);
+				imageurl = url.parse(imageurl);
+				var options2 = {
+					host: imageurl.host,
+					port: 80,
+					path: imageurl.path,
+					method: "GET",
+					agent: subheaders["User-Agent"]
+				};
+                var stringrequest = client2.request(options2, function(finalres){
                 //console.log(imageurl);
-                stringrequest.on('response',function(finalres){
-                    finalres.on('data',function(finaldata){
-                        //console.log(finaldata.toString());
+						finalres.on('data',function(finaldata){
+						//console.log(finaldata.toString());
                         start = /:bold">/.exec(finaldata.toString());
                         end = /<\/a/.exec(finaldata.toString());
 

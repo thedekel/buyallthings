@@ -57,5 +57,5 @@ xhr.onreadystatechange = function(){
     }
 }
 var srcUrl = document.getElementById("uniqueidnoonewilleverthinktouse").innerHTML;
-xhr.open("GET", "http://127.0.0.1:8000/images?"+srcUrl,true);
+xhr.open("GET", "http://thedekel.net/images?"+srcUrl,true);
 xhr.send();
