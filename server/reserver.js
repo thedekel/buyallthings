@@ -28,6 +28,13 @@ http.createServer(function(req,res){
         var client = http.createClient(80,'images.google.com');
         var client2 = http.createClient(80,'images.google.com');
         var client3 = http.createClient(80,'open.api.ebay.com');
+		var options1 = {
+			host: 'images.google.com',
+			port: 80,
+			path: "/searchbyimage?image_url="+imageurl,
+			method: "GET"
+
+		}
         var imagerequest = client.request("GET", "http://images.google.com/searchbyimage?image_url="+imageurl, headers);
 
         imagerequest.on('response', function(imageres){
@@ -39,7 +46,7 @@ http.createServer(function(req,res){
                 }
                 var imageurl = mydata[0].substring(6,mydata[0].length-1);
                 var stringrequest = client2.request("GET", imageurl, subheaders);
-                console.log(imageurl);
+                //console.log(imageurl);
                 stringrequest.on('response',function(finalres){
                     finalres.on('data',function(finaldata){
                         //console.log(finaldata.toString());
@@ -55,7 +62,7 @@ http.createServer(function(req,res){
                             if (/nbsp/.test(ret)){
                                 return;
                             }
-                            console.log(ret);
+                            //console.log(ret);
                             //use ret here
                             var subheaders2 = {
                                 "Host":"svcs.ebay.com",
@@ -63,10 +70,10 @@ http.createServer(function(req,res){
                                 'Content-Type':'application/json'
                             }
                             ret = ret.replace(/\s/g,"+");
-                            console.log(ret);
+                            //console.log(ret);
                             var command = 'curl '+"\"http://svcs.ebay.com/services/search/FindingService/v1?OPERATION-NAME=findItemsByKeywords&SERVICE-VERSION=1.11.0&SECURITY-APPNAME="+SEC_APPNAME+"&RESPONSE-DATA-FORMAT=JSON&REST-PAYLOAD&keywords="+ret+"&paginationInput.entriesPerPage=10\"";
                             child = exec(command, function(error,stdout,stderr){
-                              console.log("stdout: " +stdout);
+                              //console.log("stdout: " +stdout);
                               res.writeHead(200, {"Content-Type":"text/plain"});
                               res.end(stdout);
                             });
