@@ -22,6 +22,15 @@ xhr.onreadystatechange = function(){
                 document.body.removeChild(container);
             };
         }
+		if (/^nores/i.exec(xhr.responseText){
+			ccc = xhr.responseText.split(",")[1];
+            container.innerHTML = "<p style='position:fixed;top:50%;margin-top:-.5em;'>Sorry, no results were found. <a href='"+ccc+"'>view image results</a></p>";
+            
+            container.onclick = function(){
+                document.body.removeChild(container);
+            };
+
+		}
         myobj = JSON.parse(xhr.responseText);
         console.log(myobj);
         results = myobj.findItemsByKeywordsResponse[0].searchResult[0].item;
